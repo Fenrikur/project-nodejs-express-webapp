@@ -8,9 +8,9 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Compiling the code..."
-    - docker build -t express:latest .
-    - docker tag express:latest localhost:5000/express:latest
-    - docker push localhost:5000/express:latest
+    - docker build -t express:nightly .
+    - docker tag express:nightly localhost:5000/express:nightly
+    - docker push localhost:5000/express:nightly
     - echo "Compile complete."
 
 deploy-job:      # This job runs in the deploy stage.

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: express-deployment
+  name: express-nightly-deployment
   labels:
-    app: express
+    app: express-nightly
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: express
+      app: express-nightly
   template:
     metadata:
       labels:
-        app: express
+        app: express-nightly
     spec:
       containers:
       - name: express
-        image: localhost:5000/express:latest
+        image: localhost:5000/express:nightly
         ports:
         - containerPort: 3000
           name: "web"
@@ -24,10 +24,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: express-service
+  name: express-nightly-service
 spec:
   selector:
-    app: express
+    app: express-nightly
   ports:
     - protocol: TCP
       port: 80
@@ -36,16 +36,16 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: express-ingress
+  name: express-nightly-ingress
 spec:
   rules:
-  - host: express.localhost
+  - host: express-nightly.localhost
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: express-service
+            name: express-nightly-service
             port:
               number: 80
