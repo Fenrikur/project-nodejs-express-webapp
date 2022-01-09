@@ -1,0 +1,23 @@
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - deploy
+
+build-job:       # This job runs in the build stage, which runs first.
+  tags: 
+    - shell
+  stage: build
+  script:
+    - echo "Compiling the code..."
+    - docker build -t express:latest .
+    - docker tag express:latest localhost:5000/express:latest
+    - docker push localhost:5000/express:latest
+    - echo "Compile complete."
+
+deploy-job:      # This job runs in the deploy stage.
+  variables:
+    CI_DEBUG_TRACE: "true"
+  stage: deploy  # It only runs when the build stage completes successfully (we don't do tests here, because we're just THAT confident everything will work as expected and why shouldn't it, right?)
+  script:
+    - echo "Deploying application..."
+    - kubectl apply -f deployment.yaml
+    - echo "Application successfully deployed."
